@@ -75,6 +75,7 @@ let calculateDiv = function(event) {
         cardData["Total calories"] = Math.round(value);
     }
     setCard(card, cardData);
+    setSaveFlag();
 }
 let setCard = function(card, cardData) {
     let inputs = {};
