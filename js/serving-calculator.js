@@ -1,6 +1,7 @@
 const Constants = {};
 Constants.startingWeight = "Starting weight";
 Constants.endingWeight = "Ending weight"
+let canUseCookies = false;
 let copyTimeout = undefined;
 let startGradualFade = function (element) {
     element.style.opacity = 1;
@@ -34,6 +35,7 @@ let createNewCalculationDiv = function(title, startingWeight, endingWeight) {
     let closeButton = document.createElement('button');
     closeButton.classList.add('close');
     closeButton.innerText = '\u00D7';
+    closeButton.addEventListener('click', closeCalculationDiv);
     div.appendChild(closeButton);
     createLabeledInput(div, "Title", title);
     createLabeledInput(div, "Starting weight", startingWeight, "numeric", 'g');
@@ -43,6 +45,10 @@ let createNewCalculationDiv = function(title, startingWeight, endingWeight) {
     createLabeledInput(div, "Calories per serving", endingWeight, "numeric");
     createLabeledInput(div, "Total calories", endingWeight, "numeric");
     return div;
+}
+let closeCalculationDiv = function (event) {
+    let button = event.target;
+    button.parentElement.remove();
 }
 let createLabeledInput = function(div, name, value, inputmode, unit) {
     let subDiv = document.createElement("div");
@@ -66,4 +72,18 @@ let createLabeledInput = function(div, name, value, inputmode, unit) {
     }
     div.appendChild(subDiv);
 }
+let cookiesEnabled = function (enabled)  {
+    canUseCookies = enabled;
+    let consentBanner = document.getElementById('consent-banner');
+    consentBanner.remove();
+    loadCookie();
+}
+let loadCookie = function () {
+    if(document.cookie) {
+        canUseCookies = true;
+        let cookieValues = parseCookie(document.cookie);
+    }
+}
+
 fade();
+loadCookie();
