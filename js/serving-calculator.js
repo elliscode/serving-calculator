@@ -68,7 +68,11 @@ let calculateDiv = function(event) {
         cardData["Serving count"] = Math.round(value * 1000) / 1000;
     } else if(cardData["Starting weight"] && cardData["Serving weight"] && cardData["Serving count"]) {
         let value = cardData["Starting weight"] - (cardData["Serving weight"] * cardData["Serving count"]);
-        cardData["Starting weight"] = Math.round(value * 1000) / 1000;
+        cardData["Ending weight"] = Math.round(value * 1000) / 1000;
+    }
+    if(cardData["Calories per serving"] && cardData["Serving count"]) {
+        let value = cardData["Calories per serving"] * cardData["Serving count"];
+        cardData["Total calories"] = Math.round(value);
     }
     setCard(card, cardData);
 }
