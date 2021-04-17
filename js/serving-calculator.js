@@ -49,8 +49,44 @@ let createNewCalculationDiv = function (json) {
     let calculateButton = document.createElement('button');
     calculateButton.innerText = 'Calculate';
     calculateButton.style.float = 'right';
+    calculateButton.addEventListener('click', calculateDiv);
     div.appendChild(calculateButton);
     return div;
+}
+let calculateDiv = function(event) {
+    let card = event.target.parentElement;
+    let cardData = parseCard(card);
+    // cardData["Starting weight"];
+    // cardData["Ending weight"];
+    // cardData["Serving weight"];
+    // cardData["Serving count"];
+    // cardData["Calories per serving"];
+    // cardData["Total calories"];
+
+    if(cardData["Starting weight"] && cardData["Ending weight"] && cardData["Serving weight"]) {
+        let value = (cardData["Starting weight"] - cardData["Ending weight"]) / cardData["Serving weight"];
+        cardData["Serving count"] = Math.round(value * 1000) / 1000;
+    } else if(cardData["Starting weight"] && cardData["Serving weight"] && cardData["Serving count"]) {
+        let value = cardData["Starting weight"] - (cardData["Serving weight"] * cardData["Serving count"]);
+        cardData["Starting weight"] = Math.round(value * 1000) / 1000;
+    }
+    setCard(card, cardData);
+}
+let setCard = function(card, cardData) {
+    let inputs = {};
+    let inputsFound = document.getElementsByTagName('input');
+    for(let input of inputsFound) {
+        let field = input.getAttribute('field');
+        if(field) {
+            inputs[field] = input;
+        }
+    }
+    for(let key of Object.keys(cardData)) {
+        let cardEntry = inputs[key];
+        if(cardEntry) {
+            cardEntry.value = cardData[key];
+        }
+    }
 }
 let closeCalculationDiv = function (event) {
     let button = event.target;
@@ -96,18 +132,22 @@ let getArrayOfInputs = function () {
     let cardArray = [];
     let cards = document.getElementsByClassName('card');
     for (let card of cards) {
-        let cardData = {};
-        let inputs = card.getElementsByTagName('input');
-        for (let input of inputs) {
-            let field = input.getAttribute('field');
-            if(!field || !input.value) {
-                continue;
-            }
-            cardData[field] = input.value;
-        }
+        let cardData = parseCard(card);
         cardArray.push(cardData);
     }
     return cardArray;
+}
+let parseCard = function (card) {
+    let cardData = {};
+    let inputs = card.getElementsByTagName('input');
+    for (let input of inputs) {
+        let field = input.getAttribute('field');
+        if(!field || !input.value) {
+            continue;
+        }
+        cardData[field] = input.value;
+    }
+    return cardData;
 }
 let cookiesEnabled = function (enabled) {
     canUseCookies = enabled;
