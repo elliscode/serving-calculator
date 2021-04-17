@@ -194,6 +194,9 @@ let parseCookie = function (cookieString) {
     return output;
 }
 let writeCookie = function () {
+    if(!canUseCookies) {
+        return;
+    }
     let cookieString = '';
     if (currentData) {
         cookieString += 'currentData=' + JSON.stringify(currentData) + ';';
