@@ -203,6 +203,9 @@ let writeCookie = function () {
     }
     cookieString += 'canUseCookies=true;';
     cookieString += 'SameSite=Strict;';
+    let expirationDate = new Date();
+    expirationDate.setHours(expirationDate.getHours() + 24);
+    cookieString += 'Expires=' + expirationDate + ';';
     document.cookie = cookieString;
 }
 let periodicSave = setInterval(modifyStoredData, 1000);
