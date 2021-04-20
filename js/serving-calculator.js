@@ -205,7 +205,7 @@ let writeCookie = function () {
     cookieString += 'SameSite=Strict;';
     let expirationDate = new Date();
     expirationDate.setHours(expirationDate.getHours() + 24);
-    cookieString += 'Expires=' + expirationDate + ';';
+    cookieString += 'expires=' + expirationDate.toUTCString() + ';';
     document.cookie = cookieString;
 }
 let periodicSave = setInterval(modifyStoredData, 1000);
